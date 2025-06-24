@@ -27,9 +27,11 @@ def get_winner(board):
 
     return "tie"
 
-def getAImove(board, turn, top_level):
+def getAImove(board, turn, top_level, iiiiii):
     winner = get_winner(board)
     new_board = copy.deepcopy(board)
+    if iiiiii == 0:
+        return([0, 0])
     if winner != None:
         if winner == "X":
             return -1
@@ -46,7 +48,7 @@ def getAImove(board, turn, top_level):
                 new_board = copy.deepcopy(board)
                 if board[row][col] == " ":
                     new_board[row][col] = turn
-                    score = getAImove(new_board, "X", False)
+                    score = getAImove(new_board, "X", False, 8)
                     if score > best_score:
                         best_score = score
                         best_move = [row, col]
@@ -59,7 +61,7 @@ def getAImove(board, turn, top_level):
                 new_board = copy.deepcopy(board)
                 if board[row][col] == " ":
                     new_board[row][col] = turn
-                    score = getAImove(new_board, "O", False)
+                    score = getAImove(new_board, "O", False, 8)
                     if score < best_score:
                         best_score = score
                         best_move = [row, col]
@@ -67,7 +69,7 @@ def getAImove(board, turn, top_level):
         return(best_move)
     else:
         return(best_score)
-        
+       
 def get_input(prompt, expected_type):
     print(prompt)
     # Mapping from Python types to friendly descriptions
@@ -109,8 +111,8 @@ def printBoard(board):
 def runRound():
     winner = None
     board = [
-        [" ", " ", " "], 
-        [" ", " ", " "], 
+        [" ", " ", " "],
+        [" ", " ", " "],
         [" ", " ", " "]
         ]
     turn_names = {0: "your", 1: "the computer's"}
@@ -118,6 +120,8 @@ def runRound():
         turn = 0
     else:
         turn = 1
+
+    iiiiiii = 0
 
     while winner == None:
         printBoard(board)
@@ -134,10 +138,12 @@ def runRound():
             board[player_x][player_y] = "X"
             print(f"You moved in row {player_x + 1}, column {player_y + 1}")
         elif turn == 1:
-            ai_x, ai_y = getAImove(board, "O", True)
+            print("The AI is thinking...")
+            ai_x, ai_y = getAImove(board, "O", True, iiiiiii)
             print(f"The AI moved in row {ai_x + 1}, column {ai_y + 1}")
             board[ai_x][ai_y] = "O"
         turn = (turn + 1) % 2
+        iiiiiii += 1
         winner = get_winner(board)
     if winner == "tie":
         print("It's a tie!")
@@ -147,3 +153,4 @@ def runRound():
         print('"O" (AI) wins!')
     printBoard(board)
 runRound()
+
